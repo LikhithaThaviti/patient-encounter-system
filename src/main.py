@@ -2,11 +2,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
+
 from src import models  # noqa: F401
 from src.database import Base, engine, get_db
-
-Base.metadata.create_all(bind=engine)
-
 from src.schemas.appointment import AppointmentCreate, AppointmentRead
 from src.schemas.doctor import DoctorCreate, DoctorRead
 from src.schemas.patient import PatientCreate, PatientRead
@@ -17,6 +15,10 @@ from src.services.appointment_service import (
 )
 from src.services.doctor_service import create_doctor, get_doctor, list_doctors
 from src.services.patient_service import create_patient, get_patient, list_patients
+
+Base.metadata.create_all(bind=engine)
+
+
 
 
 @asynccontextmanager
