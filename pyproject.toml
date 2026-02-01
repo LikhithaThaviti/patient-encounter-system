@@ -1,0 +1,34 @@
+[project]
+name = "patient-encounter-system"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "LikhithaThaviti",email = "likhithathaviti@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic (>=2.12.5,<3.0.0)",
+    "alembic (>=1.18.3,<2.0.0)",
+    "sqlalchemy (>=2.0.46,<3.0.0)",
+    "uvicorn (>=0.40.0,<0.41.0)",
+    "fastapi (>=0.128.0,<0.129.0)",
+    "python-dotenv (>=1.2.1,<2.0.0)",
+    "pymysql (>=1.1.2,<2.0.0)",
+    "email-validator (>=2.3.0,<3.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.2,<10.0.0)",
+    "ruff (>=0.14.14,<0.15.0)",
+    "bandit (>=1.9.3,<2.0.0)",
+    "black (>=26.1.0,<27.0.0)"
+]
