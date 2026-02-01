@@ -1,4 +1,5 @@
-from sqlalchemy import text 
+from sqlalchemy import text
+
 from src.database import engine
 
 with engine.begin() as conn:
