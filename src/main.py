@@ -19,8 +19,6 @@ from src.services.patient_service import create_patient, get_patient, list_patie
 Base.metadata.create_all(bind=engine)
 
 
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
