@@ -1,16 +1,44 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DATABASE_URL = "mysql+pymysql://mongouhd_evernorth:U*dgQkKRuEHe@cp-15.webhostbox.net/mongouhd_evernorth"
+# Default SQLite (safe fallback)
+DEFAULT_SQLITE_URL = "sqlite:///./app.db"
+TEST_SQLITE_URL = "sqlite:///./test.db"
+
+
+def is_pytest_running() -> bool:
+    return "PYTEST_CURRENT_TEST" in os.environ
+
+
+# Decide DB URL
+if is_pytest_running():
+    DATABASE_URL = TEST_SQLITE_URL
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_SQLITE_URL)
+
+
+# SQLite needs special args
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
 
 
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,
     future=True,
-    connect_args={"init_command": "SET time_zone='+00:00'"},
+    pool_pre_ping=True,
+    connect_args=connect_args,
 )
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+
+
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+    future=True,
+)
 
 
 class Base(DeclarativeBase):
@@ -23,3 +51,4 @@ def get_db():
         yield db
     finally:
         db.close()
+

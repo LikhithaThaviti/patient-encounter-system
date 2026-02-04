@@ -1,5 +1,3 @@
-
-
 #python cache 
 __pycache__/
 *.__pycache__
@@ -7,3 +5,8 @@ __pycache__/
 #pytets/coverage
 .pytest_cache/
 .coverage
+*.pyc
+.env
+
+*.db
+*.db-journal
