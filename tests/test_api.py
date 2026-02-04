@@ -1,5 +1,6 @@
 import uuid
-from datetime import datetime, timedelta, timezone, date as date_type
+from datetime import date as date_type  # noqa: F401
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
