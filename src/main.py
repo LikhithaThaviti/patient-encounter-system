@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
+from datetime import date
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Query
 from sqlalchemy.orm import Session
 
 from src import models  # noqa: F401
@@ -11,7 +12,7 @@ from src.schemas.patient import PatientCreate, PatientRead
 from src.services.appointment_service import (
     create_appointment,
     get_appointment,
-    list_appointments,
+    list_appointments_by_date,
 )
 from src.services.doctor_service import create_doctor, get_doctor, list_doctors
 from src.services.patient_service import create_patient, get_patient, list_patients
@@ -68,14 +69,18 @@ def api_get_doctor(doctor_id: int, db: Session = Depends(get_db)):
     return get_doctor(db, doctor_id)
 
 
-@app.post("/appointments", response_model=AppointmentRead, status_code=201)
+@app.post("/appointments", status_code=201, response_model=AppointmentRead)
 def api_create_appointment(payload: AppointmentCreate, db: Session = Depends(get_db)):
     return create_appointment(db, payload)
 
 
 @app.get("/appointments", response_model=list[AppointmentRead])
-def api_list_appointments(db: Session = Depends(get_db)):
-    return list_appointments(db)
+def api_list_appointments(
+    date: date,
+    doctor_id: int | None = Query(default=None, gt=0),
+    db: Session = Depends(get_db),
+):
+    return list_appointments_by_date(db, date, doctor_id)
 
 
 @app.get("/appointments/{appointment_id}", response_model=AppointmentRead)
